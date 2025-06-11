@@ -1,0 +1,39 @@
+# Node.js related (in case Juice Shop or other Node tools are rebuilt)
+node_modules
+npm-debug.log
+yarn.lock
+
+# Dependency-Check Reports
+reports
+*.html
+*.json
+
+# Docker Compose artifacts
+.docker/
+.dockerignore
+.docker-compose*
+
+# Git & GitHub
+.git
+.gitignore
+.gitattributes
+.github/
+
+# IDE/Editor configs
+.vscode
+.idea
+*.code-workspace
+
+# Python cache
+__pycache__/
+
+# System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary/backup
+*.log
+*.bak
+*.swp
+*~

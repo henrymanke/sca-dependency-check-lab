@@ -1,0 +1,23 @@
+services:
+  dependency-check:
+    image: owasp/dependency-check:latest
+    container_name: dependency-check
+    platform: linux/amd64
+    volumes:
+      - ./src:/src
+      - ./reports:/report
+      - ./cache:/usr/share/dependency-check/data
+    entrypoint: ["/bin/sh", "-c"]
+    command: [
+        "/usr/share/dependency-check/bin/dependency-check.sh \
+        --scan /src \
+        --format ALL \
+        --out /report \
+        --project juice-shop",
+      ]
+    networks:
+      - sca-net
+
+networks:
+  sca-net:
+    driver: bridge

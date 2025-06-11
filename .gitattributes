@@ -1,0 +1,26 @@
+# Auto-detect text files and normalize line endings
+* text=auto
+
+# Treat Markdown, YAML, and configs as UTF-8 text
+*.md     text
+*.yml    text
+*.yaml   text
+*.sh     text eol=lf
+*.env    text eol=lf
+*.json   text
+*.html   text
+*.js     text
+*.ts     text
+*.css    text
+
+# Ensure scripts have LF line endings for Linux compatibility
+*.sh     text eol=lf
+
+# Treat images and binaries as binary
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.zip    binary
+*.gz     binary
+*.pdf    binary
