@@ -12,7 +12,7 @@ This guide outlines a best-practice CI/CD setup using GitHub Actions to automate
 
 ---
 
-## 🔐 NVD API Key (Optional but Recommended)
+## 🔐 NVD API Key
 
 > 🔄 Improves performance and reliability of CVE database syncs
 
@@ -51,33 +51,33 @@ jobs:
     name: Run Dependency Check
     runs-on: ubuntu-latest
     env:
-      # 🔐 Optional: Your NVD API Key (stored as GitHub Secret)
+      # 🔐 NVD API Key is required for faster CVE syncing
       NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
 
     steps:
-      # 🛎️ Checkout the code from the repo
+      # 🛎️ Checkout the code from the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 🐳 Set up Docker Buildx (optional, but future-proof)
+      # 🐳 Set up Docker Buildx (recommended for future multi-arch support)
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      # 🔎 Run the SCA scan via OWASP Dependency-Check
+      # 🔎 Run the Dependency-Check scan
       - name: Run Dependency-Check scan
         run: |
           docker run --rm \
             -v "$(pwd)/src:/src" \                         # Source code folder
             -v "$(pwd)/reports:/report" \                  # Report output folder
-            -e NVD_API_KEY=${{ env.NVD_API_KEY }} \        # Optional: improve CVE sync
+            -e NVD_API_KEY=${{ env.NVD_API_KEY }} \        # Pass API key into container
             owasp/dependency-check \
-              --scan /src \                                # Path to scan inside container
+              --scan /src \                                # Path to scan
               --format ALL \                               # Generate all supported report formats
-              --out /report \                              # Where to save the report
-              --project ${{ github.repository }} \         # Project name (used in report)
-              ${NVD_API_KEY:+--nvdApiKey $NVD_API_KEY}     # Use API key only if set
+              --out /report \                              # Save reports to mounted volume
+              --project "${{ github.repository }}" \       # Use repo name as project identifier
+              --nvdApiKey "${NVD_API_KEY}"                 # Always use the API key
 
-      # 📤 Upload the human-readable HTML report as artifact
+      # 📤 Upload the HTML report for human review
       - name: Upload HTML Report
         uses: actions/upload-artifact@v4
         with:
